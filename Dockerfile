@@ -28,14 +28,16 @@ RUN composer clear-cache && composer install --no-dev --optimize-autoloader
 # Crear archivo .env a partir de .env.example
 RUN cp .env.example .env
 
-# Permisos correctos para almacenamiento y cache de Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
+# Permisos correctos para almacenamiento, cache y base de datos SQLite
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # Generar clave de aplicación
 RUN php artisan key:generate
 
-# Migrar base de datos (Evita errores con PostgreSQL)
+# Migrar base de datos (Evita errores con PostgreSQL o SQLite)
+RUN touch database/database.sqlite
+RUN chmod -R 777 database/database.sqlite
 RUN php artisan migrate --force
 
 # Copiar configuración de Nginx
