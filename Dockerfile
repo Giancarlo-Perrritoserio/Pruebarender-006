@@ -29,6 +29,12 @@ RUN composer clear-cache && composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Generar clave de aplicación
+RUN php artisan key:generate
+
+# Migrar base de datos (Evita errores con PostgreSQL)
+RUN php artisan migrate --force
+
 # Copiar configuración de Nginx
 COPY default.conf /etc/nginx/sites-available/default
 
