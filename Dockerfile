@@ -1,23 +1,35 @@
-# Usa la imagen oficial de PHP con FPM
+# Usamos PHP 8.2 con FPM
 FROM php:8.2-fpm
 
-# Instala Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    zip \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-# Establece el directorio de trabajo
-WORKDIR /var/www
+# Verificar configuración de PHP (para depuración)
+RUN php --ini
 
-# Copia los archivos del proyecto
+# Copiar archivos del proyecto
+WORKDIR /var/www/html
 COPY . .
 
-# Instala dependencias de Laravel
-RUN composer install --no-dev --optimize-autoloader
+# Instalar Composer y limpiar caché
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Permisos para almacenamiento y cache
-RUN chmod -R 777 storage bootstrap/cache
+# Limpiar caché de Composer y ejecutar instalación
+RUN composer clear-cache && composer install --no-dev --optimize-autoloader
 
-# Expone el puerto 9000 para FPM
+# Permisos correctos para almacenamiento y cache de Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Exponer el puerto
 EXPOSE 9000
 
-# Comando de inicio
+# Comando por defecto para ejecutar PHP-FPM
 CMD ["php-fpm"]
