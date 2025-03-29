@@ -29,7 +29,7 @@ RUN composer clear-cache && composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer el puerto
-EXPOSE 9000
+EXPOSE 8000
 
 # Comando por defecto para ejecutar PHP-FPM
 CMD ["php-fpm"]
