@@ -1,0 +1,13 @@
+services:
+  - name: laravel-app
+    type: web
+    runtime: docker
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+    region: oregon
+    plan: free
+    buildCommand: "composer install"
+    startCommand: "php-fpm"
