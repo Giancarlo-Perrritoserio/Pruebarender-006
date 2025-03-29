@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libpq-dev \ 
+    libpq-dev \
     nginx \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
@@ -27,6 +27,7 @@ RUN composer clear-cache && composer install --no-dev --optimize-autoloader
 
 # Permisos correctos para almacenamiento y cache de Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Copiar configuración de Nginx
 COPY default.conf /etc/nginx/sites-available/default
