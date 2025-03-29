@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     nginx \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Verificar configuración de PHP (para depuración)
 RUN php --ini

@@ -7,6 +7,18 @@ services:
         value: production
       - key: APP_KEY
         sync: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: dpg-cvk2plruibrs739sj38g-a
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        value: pruebarender_db
+      - key: DB_USERNAME
+        value: pruebarender_db_user
+      - key: DB_PASSWORD
+        sync: false  # La contraseña aún no está visible, la agregaremos manualmente en Render
     region: oregon
     plan: free
     buildCommand: "composer install"
